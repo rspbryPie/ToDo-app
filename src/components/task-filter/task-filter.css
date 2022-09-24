@@ -39,3 +39,21 @@
 			bottom: 10px;
 	}
 }
+
+.filters .btn {
+	margin-right: 3px;
+}
+
+.filters .btn:not(.selected) {
+  cursor: pointer;
+}
+
+.filters .btn:hover,
+.clear-completed:hover {
+  border-color: rgba(175, 47, 47, 0.1);
+}
+
+.filters .btn-info {
+  border-color: rgba(175, 47, 47, 0.2);
+  background-color: rgba(175, 47, 47, 0.2);
+}
