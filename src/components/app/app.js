@@ -10,11 +10,7 @@ export default class App extends Component {
   maxId = 100;
 
   state = {
-    tasksData: [
-      this.createTodoItem('Completed task'),
-      this.createTodoItem('Editing task'),
-      this.createTodoItem('Active task'),
-    ],
+    tasksData: [],
     filter: 'all',
   };
 
