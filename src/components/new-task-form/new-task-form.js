@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 import './new-task-form.css';
 
 export default class NewTaskForm extends Component {
   state = {
     label: '',
+  };
+
+  static defaultProps = {
+    onAdded: () => {},
+  };
+
+  static propTypes = {
+    // eslint-disable-next-line react/no-unused-prop-types
+    onAdded: PropTypes.func,
   };
   onLabelChange = (e) => {
     this.setState({

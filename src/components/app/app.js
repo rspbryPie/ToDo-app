@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 import TaskList from '../task-list';
 import Footer from '../footer';
 import NewTaskForm from '../new-task-form';
@@ -15,7 +15,26 @@ export default class App extends Component {
       this.createTodoItem('Editing task'),
       this.createTodoItem('Active task'),
     ],
-    filter: 'active',
+    filter: 'all',
+  };
+
+  static defaultProps = {
+    tasksData: [
+      {
+        id: 10,
+        description: 'Получить список задач',
+        created: new Date(),
+        done: false,
+      },
+    ],
+    filter: 'all',
+  };
+
+  static propTypes = {
+    // eslint-disable-next-line react/no-unused-prop-types
+    filter: PropTypes.string,
+    // eslint-disable-next-line react/no-unused-prop-types
+    tasksData: PropTypes.instanceOf(Array),
   };
 
   createTodoItem(label) {

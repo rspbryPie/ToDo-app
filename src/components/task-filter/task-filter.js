@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import './task-filter.css';
 
 export default class TaskFilter extends Component {

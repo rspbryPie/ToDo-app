@@ -1,8 +1,24 @@
 import React, { Component } from 'react';
 import { formatDistance } from 'date-fns';
+import PropTypes from 'prop-types';
+
 import './task.css';
 
 export default class Task extends Component {
+  static defaultProps = {
+    description: 'Имя не задано',
+    done: false,
+    onDeleted: () => {},
+    onToggleDone: () => {},
+  };
+
+  static propTypes = {
+    description: PropTypes.string,
+    done: PropTypes.bool,
+    onDeleted: PropTypes.func,
+    onToggleDone: PropTypes.func,
+  };
+
   getFormattedDate() {
     const dateNow = new Date();
     return formatDistance(this.props.created, dateNow, { addSuffix: true });
