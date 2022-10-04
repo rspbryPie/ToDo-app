@@ -1,3 +1,3 @@
-import ChangeTaskDescription from './change-task-description';
+import ChangeTaskDescription from './change-task-description'
 
-export default ChangeTaskDescription;
+export default ChangeTaskDescription
