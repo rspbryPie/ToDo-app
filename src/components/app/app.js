@@ -21,6 +21,7 @@ export default class App extends Component {
         description: 'Получить список задач',
         created: new Date(),
         done: false,
+        isChange: false,
       },
     ],
     filter: 'all',
@@ -39,8 +40,26 @@ export default class App extends Component {
       created: new Date(),
       done: false,
       id: this.maxId++,
+      isChange: false,
     };
   }
+
+  editingItem = (id) => {
+    this.setState(({ tasksData }) => {
+      const newtasksData = tasksData.map((el) => {
+        if (el.id === id) {
+          return {
+            ...el,
+            isChange: true,
+          };
+        }
+        return el;
+      });
+      return {
+        tasksData: newtasksData,
+      };
+    });
+  };
 
   deleteItem = (id) => {
     this.setState(({ tasksData }) => {
@@ -79,7 +98,7 @@ export default class App extends Component {
   onToggleImportant = (id) => {
     this.setState(({ tasksData }) => {
       return {
-        tasksData: this.toggleProperty(tasksData, id, 'important'),
+        tasksData: this.toggleProperty(tasksData, id, 'isChange'),
       };
     });
   };
@@ -97,6 +116,24 @@ export default class App extends Component {
       const newArray = tasksData.filter((task) => !task.done);
       return {
         tasksData: newArray,
+      };
+    });
+  };
+
+  changeDescription = (id, neWdescription) => {
+    this.setState(({ tasksData }) => {
+      const newTasksData = tasksData.map((el) => {
+        if (el.id === id) {
+          return {
+            ...el,
+            description: neWdescription,
+            isChange: false,
+          };
+        }
+        return el;
+      });
+      return {
+        tasksData: newTasksData,
       };
     });
   };
@@ -140,6 +177,8 @@ export default class App extends Component {
               onDeleted={this.deleteItem}
               onToggleImportant={this.onToggleImportant}
               onToggleDone={this.onToggleDone}
+              onEditClick={this.editingItem}
+              onChangeDescription={this.changeDescription}
             />
             <Footer
               tasksData={this.state.tasksData}

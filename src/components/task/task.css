@@ -143,7 +143,11 @@
 }
 
 .todo-list li .edit {
-  display: none;
+  /* display: none; */
+  position: absolute;
+    top: 5px;
+    width: 79%;
+    left: 9%;
 }
 
 .todo-list li.editing:last-child {

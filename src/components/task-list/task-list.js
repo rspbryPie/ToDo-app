@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Task from '../task';
+import ChangeTaskDescription from '../change-task-description';
 
 import './task-list.css';
 
@@ -9,9 +10,13 @@ const TaskList = ({
   onDeleted,
   onToggleImportant,
   onToggleDone,
+  isChange,
+  onEditClick,
+  description,
+  onChangeDescription,
 }) => {
   const taskElements = tasksData.map((taskElement) => {
-    const { id, ...taskElementProps } = taskElement;
+    const { id, isChange, ...taskElementProps } = taskElement;
 
     return (
       <li key={id} className='todo-list'>
@@ -20,7 +25,16 @@ const TaskList = ({
           onDeleted={() => onDeleted(id)}
           onToggleImportant={() => onToggleImportant(id)}
           onToggleDone={() => onToggleDone(id)}
+          onEditClick={() => onEditClick(id)}
+          onChangeDescription={() => onChangeDescription(id, description)}
         />
+        {isChange ? (
+          <ChangeTaskDescription
+            id={id}
+            description={description}
+            onChangeDescription={onChangeDescription}
+          />
+        ) : null}
       </li>
     );
   });
