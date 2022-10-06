@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { formatDistance } from 'date-fns'
 import PropTypes from 'prop-types'
 
-import ChangeTaskDescription from '../change-task-description'
-
 import './task.css'
 
 export default class Task extends Component {
@@ -27,8 +25,7 @@ export default class Task extends Component {
   }
 
   render() {
-    const { id, onDeleted, description, onToggleDone, done, onToggleImportant, isChange, onChangeDescription } =
-      this.props
+    const { onDeleted, description, onToggleDone, done, onToggleImportant, isChange } = this.props
 
     let classNames = 'toggle'
     if (done) {
@@ -45,7 +42,7 @@ export default class Task extends Component {
           </span>
 
           <span className="description">
-            <span className="description__time-value"></span>
+            <span className="description__time-value" />
           </span>
           <span className="created">Created {this.getFormattedDate()}</span>
         </div>
@@ -57,7 +54,6 @@ export default class Task extends Component {
     const editTask = (
       <div className="view">
         <input className={classNames} type="checkbox" readOnly onChange={onToggleDone} checked={done} />
-
         <div className="label">
           {/* <ChangeTaskDescription
             id={id}
@@ -65,7 +61,7 @@ export default class Task extends Component {
             onChangeDescription={onChangeDescription}
           /> */}
           <span className="description">
-            <span className="description__time-value"></span>
+            <span className="description__time-value" />
           </span>
           <span className="created">Created {this.getFormattedDate()}</span>
         </div>

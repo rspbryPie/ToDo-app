@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
 import TaskFilter from '../task-filter'
 
 import './footer.css'
+
+// eslint-disable-next-line react/prefer-stateless-function
 export default class Footer extends Component {
   static defaultProps = {
     todoCount: 0,

@@ -7,6 +7,7 @@ export default class TaskFilter extends Component {
     { name: 'active', label: 'Active' },
     { name: 'done', label: 'Done' },
   ]
+
   render() {
     const { onFilterChange, filter } = this.props
 

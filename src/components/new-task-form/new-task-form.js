@@ -15,6 +15,7 @@ export default class NewTaskForm extends Component {
     // eslint-disable-next-line react/no-unused-prop-types
     onAdded: PropTypes.func,
   }
+
   onLabelChange = (e) => {
     this.setState({
       label: e.target.value,
@@ -28,6 +29,7 @@ export default class NewTaskForm extends Component {
       label: '',
     })
   }
+
   render() {
     return (
       <form onSubmit={this.onSubmit}>

@@ -4,7 +4,7 @@ import './change-task-description.css'
 
 export default class ChangeTaskDescription extends Component {
   state = {
-    newDescription: this.props.description,
+    newDescription: '',
   }
 
   static defaultProps = {
@@ -14,6 +14,7 @@ export default class ChangeTaskDescription extends Component {
 
   static propTypes = {
     description: PropTypes.string,
+    // eslint-disable-next-line react/require-default-props
     id: PropTypes.number,
     onChangeDescription: PropTypes.func,
   }
@@ -41,7 +42,7 @@ export default class ChangeTaskDescription extends Component {
     const { description, id } = this.props
     return (
       <input
-        autocomplete="off"
+        autoComplete="off"
         key={id}
         type="text"
         className="edit"

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
 import TaskList from '../task-list'
 import Footer from '../footer'
 import NewTaskForm from '../new-task-form'
@@ -34,11 +35,13 @@ export default class App extends Component {
     tasksData: PropTypes.instanceOf(Array),
   }
 
+  // eslint-disable-next-line react/sort-comp
   createTodoItem(label) {
     return {
       description: label,
       created: new Date(),
       done: false,
+      // eslint-disable-next-line no-plusplus
       id: this.maxId++,
       isChange: false,
     }
@@ -93,19 +96,15 @@ export default class App extends Component {
   }
 
   onToggleImportant = (id) => {
-    this.setState(({ tasksData }) => {
-      return {
-        tasksData: this.toggleProperty(tasksData, id, 'isChange'),
-      }
-    })
+    this.setState(({ tasksData }) => ({
+      tasksData: this.toggleProperty(tasksData, id, 'isChange'),
+    }))
   }
 
   onToggleDone = (id) => {
-    this.setState(({ tasksData }) => {
-      return {
-        tasksData: this.toggleProperty(tasksData, id, 'done'),
-      }
-    })
+    this.setState(({ tasksData }) => ({
+      tasksData: this.toggleProperty(tasksData, id, 'done'),
+    }))
   }
 
   onDeleteDone = () => {
