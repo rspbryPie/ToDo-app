@@ -37,7 +37,6 @@ export default class App extends Component {
 
   // eslint-disable-next-line react/sort-comp
   createTodoItem(label) {
-    console.log('hello')
     return {
       description: label,
       created: new Date(),
