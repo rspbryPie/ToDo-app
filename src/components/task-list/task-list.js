@@ -16,12 +16,14 @@ function TaskList({
   onChangeDescription,
 }) {
   const taskElements = tasksData.map((taskElement) => {
-    const { id, isChange, ...taskElementProps } = taskElement
+    const { id, isChange, minValue, secValue, ...taskElementProps } = taskElement
 
     return (
       <li key={id} className="todo-list">
         <Task
           {...taskElementProps}
+          minValue={minValue}
+          secValue={secValue}
           onDeleted={() => onDeleted(id)}
           onToggleImportant={() => onToggleImportant(id)}
           onToggleDone={() => onToggleDone(id)}

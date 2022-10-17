@@ -5,6 +5,15 @@ import PropTypes from 'prop-types'
 import './task.css'
 
 export default class Task extends Component {
+  state = {
+    // eslint-disable-next-line react/prop-types,react/destructuring-assignment
+    min: this.props.minValue,
+    // eslint-disable-next-line react/destructuring-assignment,react/prop-types
+    sec: this.props.secValue,
+    // eslint-disable-next-line react/no-unused-state
+    isCounting: false,
+  }
+
   static defaultProps = {
     description: 'Имя не задано',
     done: false,
@@ -19,14 +28,68 @@ export default class Task extends Component {
     onToggleDone: PropTypes.func,
   }
 
+  componentWillUnmount() {
+    clearInterval(this.counterID)
+  }
+
   getFormattedDate() {
     const dateNow = new Date()
     return formatDistance(this.props.created, dateNow, { addSuffix: true })
   }
 
+  minIncrement = () => {
+    const { min } = this.state
+    this.setState({
+      min: min + 1,
+      sec: 0,
+    })
+  }
+
+  secIncrement = () => {
+    const { min, sec, isCounting } = this.state
+    const { onCheckBoxClick } = this.props
+
+    if (min === 59 && sec === 59 && isCounting === true) {
+      onCheckBoxClick()
+      clearInterval(this.counterID)
+      this.setState({
+        isCounting: false,
+      })
+    }
+    if (sec < 59) {
+      this.setState({
+        sec: sec + 1,
+        isCounting: true,
+      })
+    } else {
+      this.minIncrement()
+    }
+  }
+
+  handlePause = (event) => {
+    event.stopPropagation()
+    this.setState({ isCounting: false })
+    clearInterval(this.counterID)
+  }
+
+  handleStart = (event) => {
+    event.stopPropagation()
+    this.setState({ isCounting: true })
+    this.counterID = setInterval(() => {
+      this.secIncrement()
+    }, 1000)
+  }
+
   render() {
     const { onDeleted, description, onToggleDone, done, onToggleImportant, isChange } = this.props
-
+    const { min, sec, isCounting } = this.state
+    const buttonTimer = !isCounting ? (
+      /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
+      <button type="button" className="icon icon-play" onClick={this.handleStart} />
+    ) : (
+      /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
+      <button type="button" className="icon icon-pause" onClick={this.handlePause} />
+    )
     let classNames = 'toggle'
     if (done) {
       classNames += ' done'
@@ -42,7 +105,10 @@ export default class Task extends Component {
           </span>
 
           <span className="description">
-            <span className="description__time-value" />
+            {buttonTimer}
+            <span className="description__time-value">
+              {min}:{sec}
+            </span>
           </span>
           <span className="created">Created {this.getFormattedDate()}</span>
         </div>
@@ -61,7 +127,10 @@ export default class Task extends Component {
             onChangeDescription={onChangeDescription}
           /> */}
           <span className="description">
-            <span className="description__time-value" />
+            {buttonTimer}
+            <span className="description__time-value">
+              {min}:{sec}
+            </span>
           </span>
           <span className="created">Created {this.getFormattedDate()}</span>
         </div>

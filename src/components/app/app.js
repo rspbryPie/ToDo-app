@@ -23,6 +23,8 @@ export default class App extends Component {
         created: new Date(),
         done: false,
         isChange: false,
+        minValue: 0,
+        secValue: 0,
       },
     ],
     filter: 'all',
@@ -36,14 +38,24 @@ export default class App extends Component {
   }
 
   // eslint-disable-next-line react/sort-comp
-  createTodoItem(label) {
+  createTodoItem(label, minValue = 0, secValue = 0) {
+    const trimDescription = label.replace(/ +/g, ' ').trim()
+    // todo добавить проверку на число
+    let minValueNumber = +minValue
+    let secValueNumber = +secValue
+    if (secValueNumber > 60) {
+      minValueNumber += Math.trunc(secValueNumber / 60)
+      secValueNumber -= Math.trunc(secValueNumber / 60) * 60
+    }
     return {
-      description: label,
+      description: trimDescription,
       created: new Date(),
       done: false,
       // eslint-disable-next-line no-plusplus
       id: this.maxId++,
       isChange: false,
+      minValue: minValueNumber,
+      secValue: secValueNumber,
     }
   }
 
@@ -76,8 +88,8 @@ export default class App extends Component {
     })
   }
 
-  addItem = (text) => {
-    const newItem = this.createTodoItem(text)
+  addItem = (text, minValue, secValue) => {
+    const newItem = this.createTodoItem(text, minValue, secValue)
     this.setState(({ tasksData }) => {
       const newArray = [...tasksData, newItem]
 
