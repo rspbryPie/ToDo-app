@@ -88,7 +88,7 @@ export default class App extends Component {
     })
   }
 
-  addItem = (text, minValue, secValue) => {
+  addItem = (text, minValue = 12, secValue = 45) => {
     const newItem = this.createTodoItem(text, minValue, secValue)
     this.setState(({ tasksData }) => {
       const newArray = [...tasksData, newItem]

@@ -37,32 +37,32 @@ export default class Task extends Component {
     return formatDistance(this.props.created, dateNow, { addSuffix: true })
   }
 
-  minIncrement = () => {
+  minDecrement = () => {
     const { min } = this.state
     this.setState({
-      min: min + 1,
-      sec: 0,
+      min: min - 1,
+      sec: 59,
     })
   }
 
-  secIncrement = () => {
+  secDecrement = () => {
     const { min, sec, isCounting } = this.state
-    const { onCheckBoxClick } = this.props
+    const { onToggleDone } = this.props
 
-    if (min === 59 && sec === 59 && isCounting === true) {
-      onCheckBoxClick()
+    if (min === 0 && sec === 0 && isCounting === true) {
+      onToggleDone()
       clearInterval(this.counterID)
       this.setState({
         isCounting: false,
       })
     }
-    if (sec < 59) {
+    if (sec > 0) {
       this.setState({
-        sec: sec + 1,
+        sec: sec - 1,
         isCounting: true,
       })
     } else {
-      this.minIncrement()
+      this.minDecrement()
     }
   }
 
@@ -76,7 +76,7 @@ export default class Task extends Component {
     event.stopPropagation()
     this.setState({ isCounting: true })
     this.counterID = setInterval(() => {
-      this.secIncrement()
+      this.secDecrement()
     }, 1000)
   }
 
