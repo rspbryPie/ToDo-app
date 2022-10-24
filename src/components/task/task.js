@@ -1,144 +1,119 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { formatDistance } from 'date-fns'
-import PropTypes from 'prop-types'
 
 import './task.css'
 
-export default class Task extends Component {
-  state = {
-    // eslint-disable-next-line react/prop-types,react/destructuring-assignment
-    min: this.props.minValue,
-    // eslint-disable-next-line react/destructuring-assignment,react/prop-types
-    sec: this.props.secValue,
-    // eslint-disable-next-line react/no-unused-state
-    isCounting: false,
+const Task = ({
+  onDeleted,
+  description,
+  onToggleDone,
+  done,
+  onToggleImportant,
+  isChange,
+  minValue,
+  secValue,
+  created,
+}) => {
+  const [min, setMin] = useState(minValue)
+  const [sec, setSec] = useState(secValue)
+  const [isCounting, setCounting] = useState(false)
+
+  useEffect(() => {
+    let counterID = null
+    if (isCounting) {
+      counterID = setInterval(() => {
+        secDecrement()
+      }, 1000)
+    } else {
+      clearInterval(counterID)
+    }
+
+    return () => clearInterval(counterID)
+  }, [isCounting])
+
+  const handleStart = (event) => {
+    event.stopPropagation()
+    setCounting(true)
   }
 
-  static defaultProps = {
-    description: 'Имя не задано',
-    done: false,
-    onDeleted: () => {},
-    onToggleDone: () => {},
+  const handlePause = (event) => {
+    event.stopPropagation()
+    setCounting(false)
   }
 
-  static propTypes = {
-    description: PropTypes.string,
-    done: PropTypes.bool,
-    onDeleted: PropTypes.func,
-    onToggleDone: PropTypes.func,
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.counterID)
-  }
-
-  getFormattedDate() {
+  const getFormattedDate = () => {
     const dateNow = new Date()
-    return formatDistance(this.props.created, dateNow, { addSuffix: true })
+    return formatDistance(created, dateNow, { addSuffix: true })
   }
 
-  minDecrement = () => {
-    const { min } = this.state
-    this.setState({
-      min: min - 1,
-      sec: 59,
-    })
+  const minDecrement = () => {
+    setMin(min - 1)
+    setSec(59)
   }
 
-  secDecrement = () => {
-    const { min, sec, isCounting } = this.state
-    const { onToggleDone } = this.props
-
+  const secDecrement = () => {
     if (min === 0 && sec === 0 && isCounting === true) {
+      setCounting(false)
       onToggleDone()
-      clearInterval(this.counterID)
-      this.setState({
-        isCounting: false,
-      })
     }
     if (sec > 0) {
-      this.setState({
-        sec: sec - 1,
-        isCounting: true,
-      })
-    } else {
-      this.minDecrement()
+      setSec(sec - 1)
+      setCounting(true)
+    } else if (min >= 1) {
+      minDecrement()
     }
   }
 
-  handlePause = (event) => {
-    event.stopPropagation()
-    this.setState({ isCounting: false })
-    clearInterval(this.counterID)
+  const buttonTimer = !isCounting ? (
+    <button type="button" className="icon icon-play" onClick={handleStart} />
+  ) : (
+    <button type="button" className="icon icon-pause" onClick={handlePause} />
+  )
+  let classNames = 'toggle'
+  if (done) {
+    classNames += ' done'
   }
 
-  handleStart = (event) => {
-    event.stopPropagation()
-    this.setState({ isCounting: true })
-    this.counterID = setInterval(() => {
-      this.secDecrement()
-    }, 1000)
-  }
+  const notEditTask = (
+    <div className="view">
+      <input className={classNames} type="checkbox" readOnly onChange={onToggleDone} checked={done} />
 
-  render() {
-    const { onDeleted, description, onToggleDone, done, onToggleImportant, isChange } = this.props
-    const { min, sec, isCounting } = this.state
-    const buttonTimer = !isCounting ? (
-      /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
-      <button type="button" className="icon icon-play" onClick={this.handleStart} />
-    ) : (
-      /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
-      <button type="button" className="icon icon-pause" onClick={this.handlePause} />
-    )
-    let classNames = 'toggle'
-    if (done) {
-      classNames += ' done'
-    }
+      <div className="label">
+        <span role="presentation" className="title" onClick={onToggleDone}>
+          {description}
+        </span>
 
-    const notEditTask = (
-      <div className="view">
-        <input className={classNames} type="checkbox" readOnly onChange={onToggleDone} checked={done} />
-
-        <div className="label">
-          <span role="presentation" className="title" onClick={onToggleDone}>
-            {description}
+        <span className="description">
+          {buttonTimer}
+          <span className="description__time-value">
+            {min}:{sec}
           </span>
-
-          <span className="description">
-            {buttonTimer}
-            <span className="description__time-value">
-              {min}:{sec}
-            </span>
-          </span>
-          <span className="created">Created {this.getFormattedDate()}</span>
-        </div>
-        <button type="button" className="icon icon-edit" aria-label="log out" onClick={onToggleImportant} />
-        <button type="button" className="icon icon-destroy" aria-label="log out" onClick={onDeleted} />
+        </span>
+        <span className="created">Created {getFormattedDate()}</span>
       </div>
-    )
+      <button type="button" className="icon icon-edit" aria-label="log out" onClick={onToggleImportant} />
+      <button type="button" className="icon icon-destroy" aria-label="log out" onClick={onDeleted} />
+    </div>
+  )
 
-    const editTask = (
-      <div className="view">
-        <input className={classNames} type="checkbox" readOnly onChange={onToggleDone} checked={done} />
-        <div className="label">
-          {/* <ChangeTaskDescription
-            id={id}
-            description={description}
-            onChangeDescription={onChangeDescription}
-          /> */}
-          <span className="description">
-            {buttonTimer}
-            <span className="description__time-value">
-              {min}:{sec}
-            </span>
+  const editTask = (
+    <div className="view">
+      <input className={classNames} type="checkbox" readOnly onChange={onToggleDone} checked={done} />
+      <div className="label">
+        <span className="description">
+          {buttonTimer}
+          <span className="description__time-value">
+            {min}:{sec}
           </span>
-          <span className="created">Created {this.getFormattedDate()}</span>
-        </div>
-        <button type="button" className="icon icon-edit" aria-label="log out" onClick={onToggleImportant} />
-        <button type="button" className="icon icon-destroy" aria-label="log out" onClick={onDeleted} />
+        </span>
+        <span className="created">Created {getFormattedDate()}</span>
       </div>
-    )
+      <button type="button" className="icon icon-edit" aria-label="log out" onClick={onToggleImportant} />
+      <button type="button" className="icon icon-destroy" aria-label="log out" onClick={onDeleted} />
+    </div>
+  )
 
-    return isChange ? editTask : notEditTask
-  }
+  return isChange ? editTask : notEditTask
 }
+
+export default Task

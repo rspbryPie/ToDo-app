@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import Task from '../task'
 import ChangeTaskDescription from '../change-task-description'
@@ -38,18 +37,6 @@ function TaskList({
   })
 
   return <ul className="todo-list">{taskElements}</ul>
-}
-
-TaskList.defaultProps = {
-  tasksData: () => {},
-  onDeleted: () => {},
-  onToggleDone: () => {},
-}
-
-TaskList.propTypes = {
-  tasksData: PropTypes.instanceOf(Array),
-  onDeleted: PropTypes.func,
-  onToggleDone: PropTypes.func,
 }
 
 export default TaskList

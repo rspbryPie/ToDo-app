@@ -8,11 +8,8 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:prettier/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
-    "eslint-config-prettier",
-    "airbnb",
     "prettier"
   ],
   "parser": "@babel/eslint-parser",
